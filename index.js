@@ -25,6 +25,54 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+// Time stamp Microservice TASK
+
+
+// for empty date parameter
+
+app.get('/api', (req,res) => {
+
+  //current time
+
+  res.json({unix: new Date().getTime(),utc: new Date().toUTCString()})
+})
+
+
+app.get('/api/:date?', (req,res) => {
+
+  let {date} = req.params
+  
+   let utc;
+   let unix;
+
+   
+ 
+  if (new Date(date).toString() === 'Invalid Date' && new Date(Number(date)).toString() === 'Invalid Date')
+  {
+      return res.json({error: 'Invalid Date'})
+  }
+  else if (date.indexOf('-') === -1 && date.indexOf(' ') === -1) // for unix
+  {
+    date = Number(date)
+    utc = new Date(date).toUTCString()
+    unix = date
+    
+  }
+   else // for date (yyyy-month-day)
+  {
+      utc = new Date(date).toUTCString()
+      unix = new Date(date).getTime()
+  }
+  
+  
+   res.json({unix,utc})
+})
+
+
+
+// 
+
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
